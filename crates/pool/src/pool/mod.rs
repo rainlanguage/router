@@ -51,7 +51,7 @@ mod tests {
     #[test]
     fn test_create2() -> anyhow::Result<()> {
         // univ3 protocol
-        let univ3_created_address = create2_address(
+        let univ3_pool_generated_address = create2_address(
             Address::from_hex("0x1F98431c8aD98523631AE4a59f267346ea31F984").unwrap(),
             Address::from_hex("0x3b9b5AD79cbb7649143DEcD5afc749a75F8e6C7F").unwrap(),
             Address::from_hex("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2").unwrap(),
@@ -64,10 +64,10 @@ mod tests {
         );
         let expected_address =
             Address::from_hex("0x72b236b8EB61B15833e514750b65b94a73D74A01").unwrap();
-        assert_eq!(univ3_created_address, expected_address);
+        assert_eq!(univ3_pool_generated_address, expected_address);
 
         // univ2 protocol
-        let univ2_created_address = create2_address(
+        let univ2_pool_generated_address = create2_address(
             Address::from_hex("0x28b70f6Ed97429E40FE9a9CD3EB8E86BCBA11dd4").unwrap(),
             Address::from_hex("0x140d8d3649ec605cf69018c627fb44ccc76ec89f").unwrap(),
             Address::from_hex("0xff56eb5b1a7faa972291117e5e9565da29bc808d").unwrap(),
@@ -80,7 +80,7 @@ mod tests {
         );
         let expected_address =
             Address::from_hex("0x87E0E33558c8e8EAE3c1E9EB276e05574190b48a").unwrap();
-        assert_eq!(univ2_created_address, expected_address);
+        assert_eq!(univ2_pool_generated_address, expected_address);
 
         Ok(())
     }
