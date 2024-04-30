@@ -1,4 +1,4 @@
-name: Rustjs CI
+name: Rain CI
 on: [push]
 
 jobs:
