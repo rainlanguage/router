@@ -3,7 +3,7 @@ use alloy_primitives::{keccak256, Address, U256};
 
 // UniswapV3 protocol pool fee options
 #[derive(Copy, Clone, Debug)]
-#[repr(usize)]
+#[repr(u64)]
 pub enum UniV3Fee {
     // 0.01%
     LOWEST = 100,
@@ -36,7 +36,7 @@ pub fn create2_address(
 ) -> Address {
     let [t1, t2] = sort_address(token1, token2);
     let salt = if let Some(fee) = fee {
-        keccak256((t1, t2, U256::from(fee as usize)).abi_encode())
+        keccak256((t1, t2, U256::from(fee as u64)).abi_encode())
     } else {
         keccak256((t1, t2).abi_encode_packed())
     };
