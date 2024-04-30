@@ -1,6 +1,7 @@
 use alloy_sol_types::SolValue;
 use alloy_primitives::{keccak256, Address, U256};
 
+// UniswapV3 pool fee values
 #[derive(Copy, Clone, Debug)]
 #[repr(usize)]
 pub enum UniV3Fee {
@@ -14,7 +15,7 @@ pub enum UniV3Fee {
     HIGH = 10000,
 }
 
-pub fn sorts_address(address1: Address, address2: Address) -> [Address; 2] {
+pub fn sort_address(address1: Address, address2: Address) -> [Address; 2] {
     if address1 < address2 {
         [address1, address2]
     } else {
@@ -22,6 +23,9 @@ pub fn sorts_address(address1: Address, address2: Address) -> [Address; 2] {
     }
 }
 
+/// Generates pool address for 2 tokens giving the factory address and initCodeHash,
+/// optionally pool fee can be given to generated address based on univ3 protocol,
+/// if no fee is given the generated address will based on univ2 protocol
 pub fn create2_address(
     factory: Address,
     init_code_hash: U256,
@@ -29,13 +33,12 @@ pub fn create2_address(
     token2: Address,
     fee: Option<UniV3Fee>,
 ) -> Address {
-    let [t1, t2] = sorts_address(token1, token2);
+    let [t1, t2] = sort_address(token1, token2);
     let salt = if let Some(fee) = fee {
         keccak256((t1, t2, U256::from(fee as usize)).abi_encode())
     } else {
         keccak256((t1, t2).abi_encode_packed())
     };
-    println!("{}", salt);
     factory.create2(salt, init_code_hash.to_be_bytes())
 }
 
