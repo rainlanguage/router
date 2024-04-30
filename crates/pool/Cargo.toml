@@ -1,0 +1,29 @@
+[package]
+name = "pool"
+description = "finds univ2/v3 pools for tokens"
+edition.workspace = true
+license.workspace = true
+homepage.workspace = true
+repository.workspace = true
+
+[lib]
+name = "pool"
+
+[dependencies]
+regex = { workspace = true }
+anyhow = { workspace = true }
+once_cell = { workspace = true }
+serde_json = { workspace = true }
+futures = { workspace = true }
+reqwest = { workspace = true }
+tokio = { workspace = true }
+thiserror = { workspace = true }
+alloy-primitives = { workspace = true }
+alloy-sol-types = { workspace = true }
+alloy-dyn-abi = { workspace = true }
+
+[lints.clippy]
+all = "warn"
+
+[package.metadata.docs.rs]
+all-features = true
