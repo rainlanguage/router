@@ -1,7 +1,7 @@
 use alloy_sol_types::SolValue;
 use alloy_primitives::{keccak256, Address, U256};
 
-// UniswapV3 pool fee values
+// UniswapV3 protocol pool fee options
 #[derive(Copy, Clone, Debug)]
 #[repr(usize)]
 pub enum UniV3Fee {
