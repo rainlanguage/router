@@ -23,9 +23,9 @@ pub fn sort_address(address1: Address, address2: Address) -> [Address; 2] {
     }
 }
 
-/// Generates a create2 address given 2 tokens addresses, a factory address and 
-/// initCodeHash, optionally pool fee can be given to generate address based on 
-/// univ3 protocol, if no fee is given the generated address will based on univ2 
+/// Generates a create2 address given 2 tokens addresses, a factory address and
+/// initCodeHash, optionally pool fee can be given to generate address based on
+/// univ3 protocol, if no fee is given the generated address will based on univ2
 /// protocol
 pub fn create2_address(
     factory: Address,
@@ -50,6 +50,7 @@ mod tests {
 
     #[test]
     fn test_create2() -> anyhow::Result<()> {
+        // univ3 protocol
         let univ3_created_address = create2_address(
             Address::from_hex("0x1F98431c8aD98523631AE4a59f267346ea31F984").unwrap(),
             Address::from_hex("0x3b9b5AD79cbb7649143DEcD5afc749a75F8e6C7F").unwrap(),
@@ -65,6 +66,7 @@ mod tests {
             Address::from_hex("0x72b236b8EB61B15833e514750b65b94a73D74A01").unwrap();
         assert_eq!(univ3_created_address, expected_address);
 
+        // univ2 protocol
         let univ2_created_address = create2_address(
             Address::from_hex("0x28b70f6Ed97429E40FE9a9CD3EB8E86BCBA11dd4").unwrap(),
             Address::from_hex("0x140d8d3649ec605cf69018c627fb44ccc76ec89f").unwrap(),
