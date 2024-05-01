@@ -2,19 +2,18 @@ name: Rain CI
 on: [push]
 
 jobs:
-  test-clippy-fmt:
+  rainix:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        task: [rainix-rs-test, rainix-rs-artifacts]
     steps:
       - uses: actions/checkout@v4
 
       - uses: DeterminateSystems/nix-installer-action@v4
       - uses: DeterminateSystems/magic-nix-cache-action@v2
 
-      - name: test
-        run: nix develop -c cargo test
+      - run: nix run .#rainix-rs-prelude
 
-      - name: clippy
-        run: nix develop -c cargo clippy --all-targets --all-features -- -D clippy::all
-
-      - name: fmt
-        run: nix develop -c cargo fmt --all -- --check
+      - name: Run ${{ matrix.task }}
+        run: nix run .#${{ matrix.task }}

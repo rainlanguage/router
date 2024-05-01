@@ -13,7 +13,6 @@
       # For `nix develop`:
       devShell = pkgs.mkShell {
         nativeBuildInputs = [
-          pkgs.openssl
           rainix.rust-build-inputs.${system}
         ];
       };
