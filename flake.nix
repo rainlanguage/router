@@ -20,6 +20,7 @@
           rainix.packages.${system}.rainix-rs-prelude
           rainix.packages.${system}.rainix-rs-static
         ];
+        shellHook = ''export OPENSSL_DIR="${pkgs.openssl}/bin/"'';
       };
     }
   );
