@@ -7,7 +7,7 @@ use alloy_primitives::{keccak256, Address, U256};
 pub enum UniV3Fee {
     // 0.01%
     LOWEST = 100,
-    // 0.1%
+    // 0.05%
     LOW = 500,
     // 0.3%
     MEDIUM = 3000,
@@ -15,11 +15,11 @@ pub enum UniV3Fee {
     HIGH = 10000,
 }
 
-pub fn sort_address(address1: Address, address2: Address) -> [Address; 2] {
-    if address1 < address2 {
-        [address1, address2]
+pub fn sort_address(addresses: [Address; 2]) -> [Address; 2] {
+    if addresses[0] < addresses[1] {
+        [addresses[0], addresses[1]]
     } else {
-        [address2, address1]
+        [addresses[1], addresses[0]]
     }
 }
 
@@ -34,7 +34,7 @@ pub fn create2_address(
     init_code_hash: U256,
     fee: Option<UniV3Fee>,
 ) -> Address {
-    let [t1, t2] = sort_address(token1, token2);
+    let [t1, t2] = sort_address([token1, token2]);
     let salt = if let Some(fee) = fee {
         keccak256((t1, t2, U256::from(fee as u64)).abi_encode())
     } else {
