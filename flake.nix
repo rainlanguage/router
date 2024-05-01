@@ -13,7 +13,7 @@
       # For `nix develop`:
       devShell = pkgs.mkShell {
         nativeBuildInputs = [
-          rainix.node-build-inputs.${system}
+          rainix.rust-build-inputs.${system}
         ];
       };
     }
