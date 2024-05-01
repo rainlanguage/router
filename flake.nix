@@ -14,6 +14,10 @@
       devShell = pkgs.mkShell {
         nativeBuildInputs = [
           rainix.rust-build-inputs.${system}
+          rainix.packages.${system}.rainix-rs-test
+          rainix.packages.${system}.rainix-rs-artifacts
+          rainix.packages.${system}.rainix-rs-prelude
+          rainix.packages.${system}.rainix-rs-static
         ];
       };
     }
