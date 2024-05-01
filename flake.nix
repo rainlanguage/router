@@ -12,7 +12,7 @@
     in {
       # For `nix develop`:
       devShell = pkgs.mkShell {
-        buildInputs = [
+        nativeBuildInputs = [
           rainix.rust-build-inputs.${system}
           rainix.packages.${system}.rainix-rs-test
           rainix.packages.${system}.rainix-rs-artifacts
