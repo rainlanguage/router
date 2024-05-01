@@ -1,5 +1,5 @@
 [package]
-name = "pool"
+name = "pool-finder"
 description = "finds univ2/v3 pools for tokens"
 edition.workspace = true
 license.workspace = true
@@ -7,7 +7,7 @@ homepage.workspace = true
 repository.workspace = true
 
 [lib]
-name = "pool"
+name = "pool-finder"
 
 [dependencies]
 regex = { workspace = true }
