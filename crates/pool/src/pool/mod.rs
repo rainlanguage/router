@@ -23,11 +23,11 @@ pub fn sort_address(addresses: [Address; 2]) -> [Address; 2] {
     }
 }
 
-/// Generates a create2 address given 2 tokens addresses, a factory address and
-/// initCodeHash, optionally pool fee can be given to generate address based on
-/// univ3 protocol, if no fee is given the generated address will based on univ2
-/// protocol
-pub fn create2_address(
+/// Generates a uniswap protocl pool address using create2, given 2 tokens
+/// addresses, a factory address and initCodeHash, optionally pool fee can
+/// be given to generate address based on univ3 protocol, if no fee is given
+/// the generated address will based on univ2 protocol
+pub fn uni_pool_addrerss(
     factory: Address,
     token1: Address,
     token2: Address,
@@ -51,7 +51,7 @@ mod tests {
     #[test]
     fn test_create2() -> anyhow::Result<()> {
         // univ3 protocol
-        let univ3_pool_generated_address = create2_address(
+        let univ3_pool_generated_address = uni_pool_addrerss(
             Address::from_hex("0x1F98431c8aD98523631AE4a59f267346ea31F984").unwrap(),
             Address::from_hex("0x3b9b5AD79cbb7649143DEcD5afc749a75F8e6C7F").unwrap(),
             Address::from_hex("0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2").unwrap(),
@@ -67,7 +67,7 @@ mod tests {
         assert_eq!(univ3_pool_generated_address, expected_address);
 
         // univ2 protocol
-        let univ2_pool_generated_address = create2_address(
+        let univ2_pool_generated_address = uni_pool_addrerss(
             Address::from_hex("0x28b70f6Ed97429E40FE9a9CD3EB8E86BCBA11dd4").unwrap(),
             Address::from_hex("0x140d8d3649ec605cf69018c627fb44ccc76ec89f").unwrap(),
             Address::from_hex("0xff56eb5b1a7faa972291117e5e9565da29bc808d").unwrap(),
