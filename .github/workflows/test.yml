@@ -14,4 +14,4 @@ jobs:
       - uses: DeterminateSystems/magic-nix-cache-action@v2
 
       - name: Run ${{ matrix.task }}
-        run: nix develop -c ${{ matrix.task }}
+        run: nix develop --pure -c ${{ matrix.task }}
