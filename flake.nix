@@ -1,42 +1,24 @@
 {
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
-    # rainix.url = "github:rainprotocol/rainix";
-    nixpkgs.url = "github:nixos/nixpkgs/902522b1a069597be55bc1547fadaaeb62111019";
-    rust-overlay.url = "github:oxalica/rust-overlay";
+    rainix.url = "github:rainprotocol/rainix";
   };
 
-  outputs = { self, flake-utils, rust-overlay, nixpkgs }:
+  outputs = { self, flake-utils, rainix }:
 
   flake-utils.lib.eachDefaultSystem (system:
     let
-      overlays =[ (import rust-overlay) ];
-        pkgs = import nixpkgs {
-          inherit system overlays;
-        };
-        rust-version = "1.76.0";
-        rust-toolchain = pkgs.rust-bin.stable.${rust-version}.default.override (previous: {
-          targets = previous.targets ++ [ "wasm32-unknown-unknown" ];
-        });
+      pkgs = rainix.pkgs.${system};
+      rust-build-inputs = rainix.rust-build-inputs.${system};
     in {
       # For `nix develop`:
       devShell = pkgs.mkShell {
         nativeBuildInputs = [
-          rust-toolchain
-          pkgs.cargo-release
-          pkgs.gmp
-          pkgs.openssl
-          pkgs.libusb
-          pkgs.pkg-config
-          pkgs.wasm-bindgen-cli
-          pkgs.gettext
-          pkgs.libiconv
-          pkgs.cargo-flamegraph
-          # rainix.rust-build-inputs.${system}
-          # rainix.packages.${system}.rainix-rs-test
-          # rainix.packages.${system}.rainix-rs-artifacts
-          # rainix.packages.${system}.rainix-rs-prelude
-          # rainix.packages.${system}.rainix-rs-static
+          rust-build-inputs
+          rainix.packages.${system}.rainix-rs-test
+          rainix.packages.${system}.rainix-rs-artifacts
+          rainix.packages.${system}.rainix-rs-prelude
+          rainix.packages.${system}.rainix-rs-static
         ];
       };
     }
