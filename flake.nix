@@ -2,10 +2,11 @@
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
     # rainix.url = "github:rainprotocol/rainix";
+    nixpkgs.url = "github:nixos/nixpkgs/902522b1a069597be55bc1547fadaaeb62111019";
     rust-overlay.url = "github:oxalica/rust-overlay";
   };
 
-  outputs = { self, flake-utils, rust-overlay }:
+  outputs = { self, flake-utils, rust-overlay, nixpkgs }:
 
   flake-utils.lib.eachDefaultSystem (system:
     let
