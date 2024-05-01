@@ -14,7 +14,6 @@
       devShell = pkgs.mkShell {
         nativeBuildInputs = [
           pkgs.openssl
-          rainix.rust-toolchain.${system}
           rainix.rust-build-inputs.${system}
         ];
       };
