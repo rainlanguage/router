@@ -14,15 +14,13 @@
       # For `nix develop`:
       devShell = pkgs.mkShell {
         nativeBuildInputs = [
+          pkgs.openssl
           rust-build-inputs
           rainix.packages.${system}.rainix-rs-test
           rainix.packages.${system}.rainix-rs-artifacts
           rainix.packages.${system}.rainix-rs-prelude
           rainix.packages.${system}.rainix-rs-static
         ];
-        shellHook = ''
-          export PKG_CONFIG_PATH="${pkgs.openssl}/bin/"
-        '';
       };
     }
   );
