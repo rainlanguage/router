@@ -93,7 +93,6 @@ impl<T: SolCall> Multicall<T> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use alloy_primitives::hex::FromHex;
 
     #[tokio::test]
     async fn test_multicall_read() -> anyhow::Result<()> {
