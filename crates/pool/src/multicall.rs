@@ -53,10 +53,13 @@ impl<T: SolCall> Multicall<T> {
     }
 
     /// executes the read call using the provided JsonRpcClient with the calls already added to the list
+    /// the Multicall3 address on all chains is the same, except a few that have unofficial deployments
+    /// such as zkSynEra, so the default Multicall3 address can be overriden in the args
     pub async fn read(
         &self,
         provider: ReadableClient<impl JsonRpcClient>,
         block_number: Option<u64>,
+        multicall_address_override: Option<Address>,
     ) -> Result<Vec<Result<Result<T::Return, Error>, Error>>, Error> {
         let calls = self
             .calls
@@ -69,7 +72,8 @@ impl<T: SolCall> Multicall<T> {
             .collect::<Vec<self::IMulticall3::Call3>>();
 
         let params = ReadContractParameters {
-            address: Address::from_hex(MULTICALL3_ADDRESS).unwrap(),
+            address: multicall_address_override
+                .unwrap_or(Address::from_hex(MULTICALL3_ADDRESS).unwrap()),
             call: self::IMulticall3::aggregate3Call { calls },
             block_number: block_number.map(U64::from),
         };
@@ -116,7 +120,7 @@ mod tests {
         multicall.add_call(usdc_symbol_call);
 
         let provider = ReadableClient::new_from_url("https://rpc.ankr.com/polygon".to_owned())?;
-        let result = multicall.read(provider, None).await?;
+        let result = multicall.read(provider, None, None).await?;
         let mut result_symbols = vec![];
         for res in result {
             result_symbols.push(res??._0);
