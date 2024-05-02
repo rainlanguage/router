@@ -5,6 +5,9 @@ use alloy_primitives::{hex::FromHex, Address, U64};
 use alloy_ethers_typecast::transaction::{ReadContractParameters, ReadableClient};
 
 /// Multicall3 contract address on all supported chains
+/// safe to say Multicall3 is deployed at this address on all major evm chains,
+/// except a few handful of chains, notably zkSyncEra, Tron, and few testnets
+/// see: https://www.multicall3.com/deployments
 pub const MULTICALL3_ADDRESS: &str = "0xcA11bde05977b3631167028862bE2a173976CA11";
 
 sol! {
