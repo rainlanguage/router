@@ -7,7 +7,7 @@ homepage.workspace = true
 repository.workspace = true
 
 [lib]
-name = "pool-finder"
+name = "pool_finder"
 
 [dependencies]
 regex = { workspace = true }
