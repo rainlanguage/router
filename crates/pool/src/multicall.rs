@@ -100,24 +100,23 @@ mod tests {
         sol! {
             function symbol() public view returns (string memory);
         }
-        let dai = Address::from_hex("0x8f3cf7ad23cd3cadbd9735aff958023239c6a063").unwrap();
-        let usdc = Address::from_hex("0x2791bca1f2de4661ed88a30c99a7a9449aa84174").unwrap();
-
         let mut multicall = Multicall::default();
 
+        let dai = Address::from_hex("0x8f3cf7ad23cd3cadbd9735aff958023239c6a063")?;
         let dai_symbol_call = MulticallCallItem {
             address: dai,
             call: symbolCall {},
         };
         multicall.add_call(dai_symbol_call);
+
+        let usdc = Address::from_hex("0x2791bca1f2de4661ed88a30c99a7a9449aa84174")?;
         let usdc_symbol_call = MulticallCallItem {
             address: usdc,
             call: symbolCall {},
         };
         multicall.add_call(usdc_symbol_call);
 
-        let rpc = "https://rpc.ankr.com/polygon".to_owned();
-        let provider = ReadableClient::new_from_url(rpc).unwrap();
+        let provider = ReadableClient::new_from_url("https://rpc.ankr.com/polygon".to_owned())?;
         let result = multicall.read(provider, None).await?;
         let mut result_symbols = vec![];
         for res in result {
