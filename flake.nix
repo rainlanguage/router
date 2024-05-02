@@ -12,7 +12,7 @@
     in {
       # For `nix develop`:
       devShell = pkgs.mkShell {
-        nativeBuildInputs = [
+        buildInputs = [
           # pkgs.openssl
           rainix.rust-build-inputs.${system}
           rainix.packages.${system}.rainix-rs-test
