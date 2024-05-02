@@ -121,8 +121,7 @@ mod tests {
         let result = multicall.read(provider, None).await?;
         let mut result_symbols = vec![];
         for res in result {
-            let symbol = res??._0;
-            result_symbols.push(symbol);
+            result_symbols.push(res??._0);
         }
 
         let expected = vec!["DAI".to_string(), "USDC".to_string()];
