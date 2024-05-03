@@ -2,11 +2,14 @@ use alloy_sol_types::SolValue;
 use std::collections::{BTreeMap, BTreeSet};
 use alloy_primitives::{keccak256, Address, U256};
 
+/// Represents a type for list of pool addresses
 pub type PoolList = BTreeSet<Address>;
+
+/// Represents a type for a map of pool addresses paired with an evm chain id
 pub type PoolMap = BTreeMap<u64, ChainPools>;
 
-/// Holds pool addresses of different types of an evm chain
-#[derive(Clone, Debug, Default, PartialEq)]
+/// Holds pool addresses of different types (such as univ2 protocol, univ3 protocol, etc) on an evm chain
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
 pub struct ChainPools {
     pub univ2: PoolList,
     pub univ3: PoolList,
