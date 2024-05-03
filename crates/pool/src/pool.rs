@@ -1,5 +1,44 @@
 use alloy_sol_types::SolValue;
+use std::collections::{BTreeMap, BTreeSet};
 use alloy_primitives::{keccak256, Address, U256};
+
+/// Represents a type for list of pool addresses
+pub type PoolList = BTreeSet<Address>;
+
+/// Represents a type for a map of pool addresses paired with an evm chain id
+pub type PoolMap = BTreeMap<u64, ChainPools>;
+
+/// Holds pool addresses of different types (such as univ2 protocol, univ3 protocol, etc) on an evm chain
+#[derive(Clone, Debug, Default, PartialEq, Eq)]
+pub struct ChainPools {
+    pub univ2: PoolList,
+    pub univ3: PoolList,
+}
+
+impl ChainPools {
+    /// ref getter of pool list of the given type
+    pub fn get_list(&self, pool_type: PoolType) -> &PoolList {
+        match pool_type {
+            PoolType::UniV2 => &self.univ2,
+            PoolType::UniV3 => &self.univ3,
+        }
+    }
+
+    /// mut ref getter of pool list of the given type
+    pub fn get_list_mut(&mut self, pool_type: PoolType) -> &mut PoolList {
+        match pool_type {
+            PoolType::UniV2 => &mut self.univ2,
+            PoolType::UniV3 => &mut self.univ3,
+        }
+    }
+}
+
+// Determines type of a pool, uniswapv2 , uniswapv3, etc
+#[derive(Copy, Clone, Debug)]
+pub enum PoolType {
+    UniV2,
+    UniV3,
+}
 
 // UniswapV3 protocol pool fee options
 #[derive(Copy, Clone, Debug)]
@@ -97,6 +136,35 @@ mod tests {
         let expected_address =
             Address::from_hex("0x87E0E33558c8e8EAE3c1E9EB276e05574190b48a").unwrap();
         assert_eq!(univ2_pool_generated_address, expected_address);
+
+        Ok(())
+    }
+
+    #[test]
+    fn test_chain_pools_getter() -> anyhow::Result<()> {
+        let address1 = Address::from_hex("0x1F98431c8aD98523631AE4a59f267346ea31F984").unwrap();
+        let address2 = Address::from_hex("0x3b9b5AD79cbb7649143DEcD5afc749a75F8e6C7F").unwrap();
+
+        let mut chain_pools = ChainPools::default();
+        chain_pools.univ2.insert(address1);
+        chain_pools.univ3.insert(address2);
+
+        let mut expected_address1 = PoolList::new();
+        expected_address1.insert(address1);
+
+        let mut expected_address2 = PoolList::new();
+        expected_address2.insert(address2);
+
+        assert_eq!(chain_pools.get_list(PoolType::UniV2), &expected_address1);
+        assert_eq!(chain_pools.get_list(PoolType::UniV3), &expected_address2);
+        assert_eq!(
+            chain_pools.get_list_mut(PoolType::UniV2),
+            &mut expected_address1
+        );
+        assert_eq!(
+            chain_pools.get_list_mut(PoolType::UniV3),
+            &mut expected_address2
+        );
 
         Ok(())
     }
