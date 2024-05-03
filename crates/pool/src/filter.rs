@@ -259,7 +259,7 @@ mod tests {
             assert_eq!(readable_pool_whitelist, expected);
         };
 
-        // make sure to empty the POOL_BLACKLIST for following tests
+        // make sure to empty the POOL_WHITELIST for following tests
         remove_from_whitelist(&vec![address2], 1, PoolType::UniV2).unwrap();
 
         Ok(())
@@ -307,7 +307,7 @@ mod tests {
         assert_eq!(expected_pool_list, filtered_list.0);
         assert_eq!(expected_intersection_list, filtered_list.1);
 
-        // make sure to empty the POOL_BLACKLIST for following tests
+        // make sure to empty the POOL_WHITELIST for following tests
         remove_from_whitelist(&vec![address1], 1, PoolType::UniV2).unwrap();
 
         Ok(())
