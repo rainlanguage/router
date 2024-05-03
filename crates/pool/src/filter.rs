@@ -81,7 +81,7 @@ pub fn remove_from_whitelist<'a, 'b>(
     Ok(())
 }
 
-/// Filters out blacklisted addresses from the given addresses
+/// Filters out blacklisted addresses by the given addresses
 pub fn filter_by_blacklist<'a, 'b>(
     list: impl IntoIterator<Item = &'a Address>,
     chain_id: u64,
@@ -100,7 +100,7 @@ pub fn filter_by_blacklist<'a, 'b>(
     Ok(filtered_list)
 }
 
-/// Filters out whitelisted addresses from the given addresses
+/// Filters out whitelisted addresses by the given addresses
 /// and retuns result + the list whitelisted addresses
 pub fn filter_by_whitelist<'a, 'b>(
     list: impl IntoIterator<Item = &'a Address>,
@@ -108,7 +108,7 @@ pub fn filter_by_whitelist<'a, 'b>(
     pool_type: PoolType,
 ) -> Result<(PoolList, PoolList), Error<'b>> {
     let mut filtered_list = PoolList::new();
-    let mut diff_list = PoolList::new();
+    let mut intersection_list = PoolList::new();
     let whitelist_map = POOL_WHITELIST.read()?;
     if let Some(whitelist) = whitelist_map.get(&chain_id) {
         let pool_typed_list = whitelist.get_list(pool_type);
@@ -116,14 +116,14 @@ pub fn filter_by_whitelist<'a, 'b>(
             if !pool_typed_list.contains(p) {
                 filtered_list.insert(*p);
             } else {
-                diff_list.insert(*p);
+                intersection_list.insert(*p);
             }
         }
     }
-    Ok((filtered_list, diff_list))
+    Ok((filtered_list, intersection_list))
 }
 
-/// Filters the given addresses from both known blacklist and whitelist
+/// Filters the given addresses by both known blacklist and whitelist
 pub fn filter_all<'a, 'b>(
     list: impl IntoIterator<Item = &'a Address>,
     chain_id: u64,
@@ -142,17 +142,17 @@ pub fn filter_all<'a, 'b>(
         .map_or(&empty_list, |v| v.get_list(pool_type));
 
     let mut filtered_list = PoolList::new();
-    let mut diff_whitelist = PoolList::new();
+    let mut intersection_whitelist = PoolList::new();
     for p in list {
         if !blacklist.contains(p) {
             if !whitelist.contains(p) {
                 filtered_list.insert(*p);
             } else {
-                diff_whitelist.insert(*p);
+                intersection_whitelist.insert(*p);
             }
         }
     }
-    Ok((filtered_list, diff_whitelist))
+    Ok((filtered_list, intersection_whitelist))
 }
 
 #[cfg(test)]
@@ -301,11 +301,11 @@ mod tests {
         let mut expected_pool_list = PoolList::default();
         expected_pool_list.insert(address2);
 
-        let mut expected_diff_list = PoolList::default();
-        expected_diff_list.insert(address1);
+        let mut expected_intersection_list = PoolList::default();
+        expected_intersection_list.insert(address1);
 
         assert_eq!(expected_pool_list, filtered_list.0);
-        assert_eq!(expected_diff_list, filtered_list.1);
+        assert_eq!(expected_intersection_list, filtered_list.1);
 
         // make sure to empty the POOL_BLACKLIST for following tests
         remove_from_whitelist(&vec![address1], 1, PoolType::UniV2).unwrap();
@@ -331,11 +331,11 @@ mod tests {
         expected_pool_list.insert(address3);
         expected_pool_list.insert(address4);
 
-        let mut expected_diff_list = PoolList::default();
-        expected_diff_list.insert(address1);
+        let mut expected_intersection_whitelist = PoolList::default();
+        expected_intersection_whitelist.insert(address1);
 
         assert_eq!(expected_pool_list, filtered_list.0);
-        assert_eq!(expected_diff_list, filtered_list.1);
+        assert_eq!(expected_intersection_whitelist, filtered_list.1);
 
         // make sure to empty the static lists for following tests
         remove_from_blacklist(&vec![address2], 1, PoolType::UniV2).unwrap();
