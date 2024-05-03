@@ -6,20 +6,20 @@ use std::sync::{PoisonError, RwLockReadGuard, RwLockWriteGuard};
 #[derive(Error, Debug)]
 pub enum Error<'a> {
     #[error(transparent)]
-    PoisonReadError(PoisonError<RwLockReadGuard<'a, BTreeMap<u64, ChainPools>>>),
+    StaticPoolListPoisonReadError(PoisonError<RwLockReadGuard<'a, BTreeMap<u64, ChainPools>>>),
 
     #[error(transparent)]
-    PoisonWriteError(PoisonError<RwLockWriteGuard<'a, BTreeMap<u64, ChainPools>>>),
+    StaticPoolListPoisonWriteError(PoisonError<RwLockWriteGuard<'a, BTreeMap<u64, ChainPools>>>),
 }
 
 impl<'a> From<PoisonError<RwLockReadGuard<'a, BTreeMap<u64, ChainPools>>>> for Error<'a> {
     fn from(value: PoisonError<RwLockReadGuard<'a, BTreeMap<u64, ChainPools>>>) -> Self {
-        Self::PoisonReadError(value)
+        Self::StaticPoolListPoisonReadError(value)
     }
 }
 
 impl<'a> From<PoisonError<RwLockWriteGuard<'a, BTreeMap<u64, ChainPools>>>> for Error<'a> {
     fn from(value: PoisonError<RwLockWriteGuard<'a, BTreeMap<u64, ChainPools>>>) -> Self {
-        Self::PoisonWriteError(value)
+        Self::StaticPoolListPoisonWriteError(value)
     }
 }
