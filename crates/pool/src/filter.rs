@@ -112,13 +112,13 @@ pub fn filter_by_whitelist<'a, 'b>(
     let whitelist_map = POOL_WHITELIST.read()?;
     if let Some(whitelist) = whitelist_map.get(&chain_id) {
         let pool_typed_list = whitelist.get_list(pool_type);
-        for p in list {
+        list.into_iter().for_each(|p| {
             if !pool_typed_list.contains(p) {
                 filtered_list.insert(*p);
             } else {
                 intersection_list.insert(*p);
             }
-        }
+        });
     }
     Ok((filtered_list, intersection_list))
 }
@@ -143,7 +143,7 @@ pub fn filter_all<'a, 'b>(
 
     let mut filtered_list = PoolList::new();
     let mut intersection_whitelist = PoolList::new();
-    for p in list {
+    list.into_iter().for_each(|p| {
         if !blacklist.contains(p) {
             if !whitelist.contains(p) {
                 filtered_list.insert(*p);
@@ -151,7 +151,7 @@ pub fn filter_all<'a, 'b>(
                 intersection_whitelist.insert(*p);
             }
         }
-    }
+    });
     Ok((filtered_list, intersection_whitelist))
 }
 
